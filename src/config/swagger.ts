@@ -4,7 +4,7 @@ import { config } from './index';
 
 // En Windows path.join usa "\" y los patrones glob necesitan "/".
 const routesGlob = path
-  .join(__dirname, '../api/routes/*.{ts,js}')
+  .join(process.cwd(), 'src/api/routes/*.{ts,js}')
   .replace(/\\/g, '/');
 
 /** Especificación OpenAPI generada a partir de los comentarios @openapi de las rutas. */
@@ -16,7 +16,7 @@ export const swaggerSpec = swaggerJSDoc({
       version: '1.0.0',
       description: 'API RESTful para registrar usuarios y gestionar sus tareas personales.',
     },
-    servers: [{ url: `http://localhost:${config.port}` }],
+        servers: [{ url: '/' }],
     components: {
       securitySchemes: {
         bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },

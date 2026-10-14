@@ -6,6 +6,9 @@ import { errorHandler } from './api/middlewares/errorHandler';
 import { swaggerSpec } from './config/swagger';
 import { NotFoundError } from './errors';
 
+// Recursos de Swagger UI desde CDN: en Vercel los archivos de node_modules no se sirven.
+const SWAGGER_CDN = 'https://unpkg.com/swagger-ui-dist@5';
+
 const app = express();
 
 app.use(express.json());
@@ -17,7 +20,17 @@ app.get('/health', (_req, res) => {
 app.use('/auth', authRoutes);
 app.use('/tasks', taskRoutes);
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCssUrl: `${SWAGGER_CDN}/swagger-ui.css`,
+    customJs: [
+      `${SWAGGER_CDN}/swagger-ui-bundle.js`,
+      `${SWAGGER_CDN}/swagger-ui-standalone-preset.js`,
+    ],
+  }),
+);
 app.get('/docs.json', (_req, res) => {
   res.json(swaggerSpec);
 });
