@@ -189,6 +189,12 @@ Elegí Vercel porque ya tengo experiencia desplegando proyectos en esa plataform
 
 10. **Errores al probar en Swagger.** Un 401 en el login, porque usé un usuario que no estaba registrado en la API; y un 400 por JSON inválido, porque pegué el cuerpo dentro de las llaves que Swagger ya traía y quedaron dos `{`. En los dos casos la API respondió correctamente, lo que también sirvió para comprobar el manejo de errores.
 
+11. **Adaptar la aplicación para Vercel.** En Vercel la aplicación corre como función serverless, sin `app.listen()`. Agregué `api/index.ts`, que exporta la app de Express, y un `vercel.json` que dirige todas las rutas hacia ella. Además, la configuración ahora acepta una `DATABASE_URL` para conectarse a Neon, manteniendo las variables separadas para el entorno local.
+
+12. **Swagger en entorno serverless.** Swagger UI cargaba sus estilos desde `node_modules`, que Vercel no sirve, así que los cargué desde un CDN. Además, `swagger-jsdoc` lee los comentarios de los archivos de rutas mientras la aplicación corre, por lo que los incluí explícitamente en el despliegue con `includeFiles` en `vercel.json`.
+
+13. **Vercel exigía una carpeta `public`.** Con el preset *Other*, Vercel ejecuta el build y espera una carpeta `public` con archivos estáticos. Como la aplicación es solo una API, agregué una carpeta `public` vacía con un `.gitkeep` para que Git la incluya.
+
 ---
 
 ## Mejoras con más tiempo

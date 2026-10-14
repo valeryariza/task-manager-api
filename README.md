@@ -10,6 +10,13 @@ API RESTful para que los usuarios se registren, inicien sesión y administren su
 - Manejo de errores centralizado con clases de error personalizadas.
 - Documentación interactiva con Swagger en `/docs`.
 
+## Demo en línea
+
+- **API:** https://task-manager-api-omega-brown.vercel.app
+- **Documentación (Swagger):** https://task-manager-api-omega-brown.vercel.app/docs
+
+Desplegada en Vercel, con base de datos PostgreSQL en Neon.
+
 ## Arquitectura
 
 El proyecto está organizado en capas, cada una con una responsabilidad:
