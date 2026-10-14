@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import type { PoolConfig } from 'pg';
 
 dotenv.config();
 
@@ -22,27 +23,28 @@ class Config {
   private static instance: Config;
 
   public readonly port: number;
-  public readonly db: {
-    host: string;
-    port: number;
-    user: string;
-    password: string;
-    database: string;
-  };
+  public readonly db: PoolConfig;
   public readonly jwt: {
     secret: string;
     expiresIn: string;
   };
 
   private constructor() {
-    this.port = Number(process.env.PORT ?? 8000);
-    this.db = {
-      host: required('DB_HOST'),
-      port: Number(required('DB_PORT')),
-      user: required('DB_USER'),
-      password: required('DB_PASSWORD'),
-      database: required('DB_NAME'),
-    };
+    this.port = Number(process.env.PORT ?? 3000);
+
+    // En producción (Neon) se usa una sola URL de conexión;
+    // en local, las variables separadas.
+    const databaseUrl = process.env.DATABASE_URL;
+    this.db = databaseUrl
+      ? { connectionString: databaseUrl }
+      : {
+          host: required('DB_HOST'),
+          port: Number(required('DB_PORT')),
+          user: required('DB_USER'),
+          password: required('DB_PASSWORD'),
+          database: required('DB_NAME'),
+        };
+
     this.jwt = {
       secret: required('JWT_SECRET'),
       expiresIn: process.env.JWT_EXPIRES_IN ?? '1h',

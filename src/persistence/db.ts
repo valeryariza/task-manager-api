@@ -5,15 +5,8 @@ import { config } from '../config';
 // Por defecto pg las convierte a Date con zona horaria y la fecha puede correrse un día.
 types.setTypeParser(1082, (value: string) => value);
 
-
 /** Pool de conexiones a PostgreSQL compartido por toda la aplicación. */
-export const pool = new Pool({
-  host: config.db.host,
-  port: config.db.port,
-  user: config.db.user,
-  password: config.db.password,
-  database: config.db.database,
-});
+export const pool = new Pool(config.db);
 
 /** Verifica que la base de datos responda. */
 export async function testConnection(): Promise<void> {
