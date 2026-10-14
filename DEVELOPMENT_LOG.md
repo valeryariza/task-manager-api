@@ -72,7 +72,7 @@ La IA generó la mayor parte del código base. Mi trabajo fue integrarlo en el p
 - Registro con el mismo email: 409 "El email ya está registrado".
 - Login correcto: devuelve un token.
 - Login con contraseña incorrecta: 401 "Credenciales inválidas".
-- ⚠️ **PENDIENTE:** confirmar en pgAdmin que la columna `password_hash` guarda un hash (`$2a$10$...`) y no la contraseña en texto plano.
+- Revisé en pgAdmin que la columna password_hash guarda un hash bcrypt y no la contraseña en texto plano.
 
 ### 3. CRUD de tareas
 
@@ -156,7 +156,14 @@ Ninguna de las pruebas produjo un error 500.
 
 ### Decisiones tomadas sin asistencia de IA
 
-⚠️ **PENDIENTE: esta sección debe completarla la autora.** La prueba pide al menos dos decisiones de arquitectura o implementación tomadas de forma independiente, con su razonamiento.
+**1. Usar PostgreSQL en lugar de MongoDB.**
+Lo tenía decidido desde que leí la prueba, antes de empezar a trabajar con el asistente. La empresa lo indica como opción preferida y los datos de este proyecto son relacionales: cada tarea pertenece a un usuario. Con PostgreSQL esa relación queda garantizada por la propia base de datos con una llave foránea (`REFERENCES users(id)`), y reglas como los estados válidos o el email único se aplican con `CHECK` y `UNIQUE`, sin depender solo del código.
+
+**2. Usar el puerto 8000 en lugar del 3000.**
+El asistente propuso el puerto 3000, pero ese puerto ya lo uso en otro proyecto en mi equipo y los dos servidores no pueden escuchar en el mismo puerto al mismo tiempo. Como el puerto se lee desde el `.env` a través de la configuración centralizada, solo cambié esa variable y no tuve que modificar el código. Esto también me confirmó la utilidad de tener la configuración separada del código.
+
+**3. Desplegar en Vercel.**
+Elegí Vercel porque ya tengo experiencia desplegando proyectos en esa plataforma, lo que me permitía publicar la API rápido y concentrar el tiempo en el código. Como Vercel no puede conectarse a una base de datos local, usé una base PostgreSQL en la nube.
 
 ---
 
